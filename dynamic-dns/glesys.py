@@ -10,11 +10,11 @@ class GleSYSAPI:
     def update_record(self, recordid, host, domain_name, ip):
         url = 'https://api.glesys.com/domain/updaterecord'
         data = {
-            recordid: recordid,
-            host: host,
-            domainname: domain_name,
-            data: ip,
-            type: 'A'
+            'recordid': recordid,
+            'host': host,
+            'domainname': domain_name,
+            'data': ip,
+            'type': 'A'
         }
         resp = requests.post(url, auth=self.auth,
             headers=self.headers, data =json.dumps(data))
@@ -24,10 +24,10 @@ class GleSYSAPI:
     def add_record(self, host, domain_name, ip):
         url = 'https://api.glesys.com/domain/addrecord'
         data = {
-            host: host,
-            domainname: domain_name,
-            data: ip,
-            type: 'A'
+            'host': host,
+            'domainname': domain_name,
+            'data': ip,
+            'type': 'A'
         }
         resp = requests.post(url, auth=self.auth,
             headers=self.headers, data =json.dumps(data))

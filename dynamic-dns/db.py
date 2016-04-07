@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Table, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship
+import json
 
 
 Base = declarative_base()
@@ -18,14 +19,28 @@ class Token(Base):
     token = Column(String)
     hostnames = relationship('Hostname', secondary=post_keywords, back_populates='tokens')
 
+    def __str__(self):
+        return self.token
+
+    def __repr__(self):
+        return self.token
+
+
 class Hostname(Base):
     __tablename__ = "hostnames"
 
     id = Column(Integer, primary_key=True)
     host = Column(String)
     domain = Column(String)
+    recordid = Column(Integer)
+
     tokens = relationship('Token', secondary=post_keywords, back_populates='hostnames')
 
+    def __str__(self):
+        return self.host + "." + self.domain
+
+    def __repr__(self):
+        return self.host + "." + self.domain
 
 def db(connectionstring, echo=True):
     engine = create_engine(connectionstring, echo=echo)

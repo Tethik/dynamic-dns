@@ -47,6 +47,19 @@ class DNSService:
         self.db.commit()
         return h
 
+    def remove_hostname(self, hostname):
+        host = self.split_host_and_domain(hostname, self.config.get("parent_host"))
+        h = self._get_diff_between_domains()
+
+        hostname = self.db.query(Hostname).filter_by(host=host, domain=self.config.get("parent_host")).first()
+        if not hostname:
+            return
+
+        r = self.api.delete_record(hostname.recordid)
+        print(r)
+        self.db.delete(hostname)
+        self.db.commit()
+
     def allow_token_to_hostname(self, token, hostname):
         host = self.split_host_and_domain(hostname, self.config.get("parent_host"))
         domainname = self.config.get("parent_host")
@@ -73,7 +86,7 @@ class DNSService:
             return
 
         host = host + "." + self._get_diff_between_domains()
-        r = self.api.update_record(hostname.recordid, host, self.config.get("parent_domain"), ip)
+        r = self.api.update_record(hostname.recordid, ip)
         print(r)
 
     def list_dns_records(self):

@@ -7,27 +7,35 @@ class GleSYSAPI:
     def __init__(self, auth_user, auth_token):
         self.auth = (auth_user, auth_token)
 
-    def update_record(self, recordid, host, domain_name, ip):
+    def update_record(self, recordid, ip, type='A'):
         url = 'https://api.glesys.com/domain/updaterecord'
         data = {
             'recordid': recordid,
-            'host': host,
-            'domainname': domain_name,
             'data': ip,
-            'type': 'A'
+            'type': type
         }
         resp = requests.post(url, auth=self.auth,
             headers=self.headers, data =json.dumps(data))
         r = resp.json()
         return r
 
-    def add_record(self, host, domain_name, ip):
+    def add_record(self, host, domain_name, ip, type='A'):
         url = 'https://api.glesys.com/domain/addrecord'
         data = {
             'host': host,
             'domainname': domain_name,
             'data': ip,
-            'type': 'A'
+            'type': type
+        }
+        resp = requests.post(url, auth=self.auth,
+            headers=self.headers, data =json.dumps(data))
+        r = resp.json()
+        return r
+
+    def delete_record(self, recordid):
+        url = 'https://api.glesys.com/domain/deleterecord'
+        data = {
+            'recordid': recordid,
         }
         resp = requests.post(url, auth=self.auth,
             headers=self.headers, data =json.dumps(data))
